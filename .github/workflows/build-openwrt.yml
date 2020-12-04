@@ -25,10 +25,11 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: .config
+#  CONFIG_FILE: .config
   DIY_P1_SH: diy-part1.sh
   DIY_P2_SH: diy-part2.sh
   UPLOAD_BIN_DIR: true
+  UPLOAD_CONFIG_DIR: true
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: true
   UPLOAD_WETRANSFER: false
@@ -76,13 +77,13 @@ jobs:
     - name: Install feeds
       run: cd openwrt && ./scripts/feeds install -a
 
-    - name: Load custom configuration
-      run: |
-        [ -e files ] && mv files openwrt/files
-        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
-        chmod +x $DIY_P2_SH
-        cd openwrt
-        $GITHUB_WORKSPACE/$DIY_P2_SH
+#    - name: Load custom configuration
+#      run: |
+#        [ -e files ] && mv files openwrt/files
+#        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+#        chmod +x $DIY_P2_SH
+#        cd openwrt
+#        $GITHUB_WORKSPACE/$DIY_P2_SH
 
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
@@ -121,6 +122,13 @@ jobs:
       with:
         name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: openwrt/bin
+    
+    - name: Upload firmware directory
+      uses: actions/upload-artifact@main
+      if: steps.organize.outputs.status == 'success' && env.UPLOAD_CONFIG_DIR == 'true'
+      with:
+        name: OpenWrt_config${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        path: openwrt/.config
 
     - name: Organize files
       id: organize
