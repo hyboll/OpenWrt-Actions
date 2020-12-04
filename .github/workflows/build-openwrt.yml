@@ -115,13 +115,6 @@ jobs:
     - name: Check space usage
       if: (!cancelled())
       run: df -hT
-      
-    - name: Upload configuration file
-      uses: actions/upload-artifact@main
-      if: steps.compile.outputs.status == 'success' && env.UPLOAD_CONFIG_DIR == 'true'
-      with:
-        name: OpenWrt_config${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-        path: openwrt/.config
 
     - name: Upload bin directory
       uses: actions/upload-artifact@main
