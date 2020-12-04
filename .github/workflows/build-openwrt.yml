@@ -86,8 +86,10 @@ jobs:
         $GITHUB_WORKSPACE/$DIY_P2_SH
 
     - name: SSH connection to Actions
-      uses: csexton/debugger-action@v1
+      uses: actions/javascript-action@v1.0.1
       if: github.event.inputs.ssh == 'true' || contains(github.event.action, 'ssh')
+      with:
+        milliseconds: 1000
         
     - name: Upload configuration file
       uses: actions/upload-artifact@main
