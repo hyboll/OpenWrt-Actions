@@ -86,7 +86,7 @@ jobs:
         $GITHUB_WORKSPACE/$DIY_P2_SH
 
     - name: SSH connection to Actions
-      uses: csexton/debugger-action@master
+      uses: csexton/debugger-action@v1
       if: github.event.inputs.ssh == 'true' || contains(github.event.action, 'ssh')
         
     - name: Upload configuration file
